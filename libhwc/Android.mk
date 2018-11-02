@@ -21,9 +21,7 @@ LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_SHARED_LIBRARIES := liblog libcutils libEGL libGLESv1_CM libhardware \
 	libhardware_legacy libion_exynos libutils libsync \
 	libexynosv4l2 libMcClient libexynosutils libhwcutils libexynosdisplay libhdmi \
-	libdisplaymodule libhdmimodule libmpp libbase libnativewindow
-
-LOCAL_STATIC_LIBRARIES := libarect
+	libdisplaymodule libhdmimodule libmpp
 
 ifeq ($(BOARD_DYNAMIC_RECOMPOSITION_DISABLED), true)
 	LOCAL_CFLAGS += -DDYNAMIC_RECOMPOSITION_DISABLED
@@ -86,20 +84,17 @@ ifeq ($(BOARD_USES_CEC),true)
 endif
 endif
 
-ifeq ($(BOARD_SUPPORTS_DOZE_POWER_MODES),true)
-	LOCAL_CFLAGS += -DSUPPORTS_DOZE_POWER_MODES
-endif
-
 # Exynos 5430 onwards use a decon frame buffer device, but still have the
 # old kernel APIs for calling it (S3C_FB_*).
 # Newer SoCs (Exynos 7420 onwards) make use of a new kernel API.
 # WARNING: Support is highly experimental!
-ifneq ($(filter exynos7420 exynos7580 exynos7880 exynos8890, $(TARGET_SOC)),)
+ifneq ($(filter exynos7420 exynos7580 exynos7870 exynos7880 exynos8890, $(TARGET_SOC)),)
 	LOCAL_CFLAGS += -DDECON_FB
 endif
 
+LOCAL_CFLAGS += -DLOG_TAG=\"hwcomposer\"
+
 LOCAL_C_INCLUDES += \
-	$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
 	$(LOCAL_PATH)/../include \
 	$(LOCAL_PATH)/../libhwcutils \
 	$(LOCAL_PATH)/../libexynosdisplay \
@@ -114,8 +109,7 @@ LOCAL_C_INCLUDES += \
 	$(TOP)/hardware/samsung_slsi-cm/exynos/libmpp \
 	$(TOP)/system/core/libsync/include
 
-LOCAL_ADDITIONAL_DEPENDENCIES := \
-	INSTALLED_KERNEL_HEADERS
+LOCAL_HEADER_LIBRARIES := generated_kernel_headers
 
 LOCAL_SRC_FILES := ExynosHWC.cpp
 

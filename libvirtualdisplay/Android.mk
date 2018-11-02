@@ -16,10 +16,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SHARED_LIBRARIES := liblog libutils libcutils libexynosutils libexynosv4l2 \
-                          libhwcutils libexynosdisplay libhwcutilsmodule libmpp libsync libion_exynos \
-                          libbase libnativewindow
-
-LOCAL_STATIC_LIBRARIES := libarect
+                          libhwcutils libexynosdisplay libhwcutilsmodule libmpp libsync libion_exynos
 
 ifeq ($(BOARD_USES_GSC_VIDEO), true)
 	LOCAL_CFLAGS += -DGSC_VIDEO
@@ -29,7 +26,6 @@ LOCAL_CFLAGS += -DUSES_VIRTUAL_DISPLAY
 LOCAL_CFLAGS += -DLOG_TAG=\"virtual\"
 
 LOCAL_C_INCLUDES := \
-	$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
 	$(LOCAL_PATH)/../include \
 	$(LOCAL_PATH)/../libhwcutils \
 	$(LOCAL_PATH)/../libexynosdisplay \
@@ -41,8 +37,7 @@ LOCAL_C_INCLUDES := \
 	$(TOP)/hardware/samsung_slsi-cm/$(TARGET_SOC)/libhwcutilsmodule \
 	$(TOP)/hardware/samsung_slsi-cm/exynos/libmpp
 
-LOCAL_ADDITIONAL_DEPENDENCIES := \
-	INSTALLED_KERNEL_HEADERS
+LOCAL_HEADER_LIBRARIES := generated_kernel_headers
 
 LOCAL_SRC_FILES := \
 	ExynosVirtualDisplay.cpp
